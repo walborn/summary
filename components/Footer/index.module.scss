@@ -1,0 +1,19 @@
+@import '~/styles/variables.scss';
+
+.root {
+  position: relative;
+  padding: 10px 0;
+  background-color: $color-lightest-gray;
+  box-shadow: $box-shadow;
+}
+
+.footer {
+  position: relative;
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 20px;
+  line-height: 40px;
+  text-align: right;
+  color: $color-light-gray;
+}

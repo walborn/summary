@@ -1,11 +1,10 @@
-import React from 'react'
 import { parseISO, format } from 'date-fns'
 
 interface Props {
-  value: string
+  value: string // date in iso format
 }
 
-export const TimeStamp = ({ value }: Props) => (
+export const TimeStamp: React.FC<Props> = ({ value }) => (
   <time dateTime={value}>
     {format(parseISO(value), 'LLLL d, yyyy')}
   </time>

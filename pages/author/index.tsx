@@ -1,50 +1,72 @@
 import { GetStaticProps } from 'next'
-import Head from 'next/head'
-import Link from 'next/link'
-
-import Layout, { siteTitle } from '../components/layout'
 import { formatDistanceStrict } from 'date-fns'
 import ru from 'date-fns/locale/ru'
-import utilStyles from '../styles/utils.module.css'
-import { getSortedPostsData } from '../lib/posts'
-import { TimeStamp } from '../components/TimeStamp'
-import { Telegram } from '../components/Telegram'
-import { Place } from '../components/Place'
+import cn from 'classnames'
+
+import { Layout } from 'components/Layout'
+import * as Icons from 'components/icons'
+import { TimeStamp } from 'components/TimeStamp'
+import { Avatar } from 'components/Avatar'
+import avatar from 'public/images/avatar.png'
+import { getSortedPostsData } from 'library/posts'
+
+import styles from './index.module.scss'
 
 interface Props {
-  allPostsData: {
+  posts: {
     date: string
     title: string
     id: string
   }[]
 }
-export default function Home({ allPostsData }: Props) {
+export default function Home({ posts }: Props) {
   const age = formatDistanceStrict(new Date(1986, 9, 29), new Date(), { unit: 'year', locale: ru })
 
   return (
-    <Layout home>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-      <section className={utilStyles.headingMd}>
-        <p>Мне {age}, родился 29 октября 1986</p>
-        <p className="contact">
-          <Telegram className="icon telegram" /> 
-          <a href="tg://resolve?domain=codebor" target="_blank" rel="noreferrer">@codebor</a>
+    <Layout title="Boris Yuzhakov">
+      <section>
+        <div className={styles.avatar}><Avatar value={avatar} size={128} /></div>
+        <h2>Обо мне</h2>
+        <p>
+          Всем привет! Расскажу немного о себе. Мне {age}, родился 29 октября 1986 году.
+          Окончил МФТИ, но вместо большой науки пошел во фронтенд.
+          Однако так и осталась большая любовь к алгоритмам и преподаванию.
         </p>
-        <p className="contact">
-          <Place className="icon place" /> 
-          <a href="https://yandex.ru/maps/-/CCUyI4B6kC" target="_blank" rel="noreferrer">
-            Москва, Тимирязевский район
-          </a>
-        </p>
+        <h2>Контакты</h2>
+        <ul className={styles.contacts}>
+          <li className={styles.contact}>
+            <a href="tg://resolve?domain=codebor" target="_blank" rel="noreferrer">
+              <Icons.Telegram className={cn(styles.icon, styles.telegram)} />
+              @codebor
+            </a>
+          </li>
+          <li className={styles.contact}>
+            <a href="https://github.com/walborn">
+              <Icons.Github className={cn(styles.icon, styles.github)} /> 
+              @walborn
+            </a>
+          </li>
+          <li className={styles.contact}>
+            <a href="https://yandex.ru/maps/-/CCUyI4B6kC" target="_blank" rel="noreferrer">
+              <Icons.Place className={cn(styles.icon, styles.place)} /> 
+              Москва, Тимирязевский район
+            </a>
+          </li>
+        </ul>
       </section>
       <section>
-      <ul className={utilStyles.list}>
-        <h2 className={utilStyles.headingLg}>Опыт работы</h2>
+        <h2>Навыки и умения</h2>
+        <Icons.JavaScript />
+        <Icons.Python />
+        <Icons.ReactJS />
+        <Icons.Github className={styles.skill}/>
+      </section>
+      <section>
+      <ul>
+        <h2>Опыт работы</h2>
         <li>
           <h3><a href="https://sibur.digital/">СИБУР Диджитал</a></h3>
-          <small className={utilStyles.lightText}>
+          <small className={styles.lightText}>
             <TimeStamp value="2020-08-29" /> — по настоящее время ({ formatDistanceStrict(new Date(2020, 8, 29), new Date(), { unit: 'month', locale: ru }) })
           </small>
           <br />
@@ -59,7 +81,7 @@ export default function Home({ allPostsData }: Props) {
         </li>
         <li>
           <h3>Cloud Link</h3>
-          <small className={utilStyles.lightText}>
+          <small className={styles.lightText}>
             <TimeStamp value="2016-05-30" /> — <TimeStamp value="2020-08-27" /> ({
               formatDistanceStrict(new Date(2016, 5, 30), new Date(2020, 8, 27), { unit: 'year', locale: ru }) })
           </small>
@@ -86,37 +108,15 @@ export default function Home({ allPostsData }: Props) {
         </ul>
       </section>
       <section>
-        <h2 className={utilStyles.headingLg}>Образование</h2>
+        <h2 className={styles.headingLg}>Образование</h2>
         <div>
           МФТИ: 2005 - 2011 
         </div>
       </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Статьи</h2>
-        <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }) => (
-            <li className={utilStyles.listItem} key={id}>
-              <Link href={`/posts/${id}`}>
-                <a>{title}</a>
-              </Link>
-              <br />
-              <small className={utilStyles.lightText}>
-                <TimeStamp value={date} />
-              </small>
-            </li>
-          ))}
-        </ul>
-      </section>
-     
     </Layout>
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const allPostsData = getSortedPostsData()
-  return {
-    props: {
-      allPostsData
-    }
-  }
-}
+export const getStaticProps: GetStaticProps = async () => ({
+  props: { posts: getSortedPostsData() }
+})

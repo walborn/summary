@@ -1,0 +1,28 @@
+.avatar {
+  text-align: center;
+}
+.contact {
+  position: relative;
+  margin-bottom: 12px;
+  padding-left: 32px;
+  .icon {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 24px;
+    transform: translateY(-50%);
+  }  
+}
+
+.telegram {
+  fill: #0088cc;
+}
+
+.place {
+  fill: #fd5c63;
+}
+
+.skill {
+  width: 48px;
+  height: 48px;
+}
